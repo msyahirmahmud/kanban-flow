@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KanbanFlow - Task & Project Management Board</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header class="navbar">
+      <h1>⚡ KanbanFlow</h1>
+      <div class="controls">
+        <select id="priorityFilter">
+          <option value="all">All Priorities</option>
+          <option value="high">High Priority</option>
+          <option value="medium">Medium Priority</option>
+          <option value="low">Low Priority</option>
+        </select>
+        <button id="addTaskBtn" class="btn btn-primary">+ Add New Task</button>
+      </div>
+    </header>
+
+    <main class="board-grid">
+      <div class="column" data-col="todo">
+        <div class="col-header">
+          <h3>📌 To Do <span class="badge" id="count-todo">0</span></h3>
+        </div>
+        <div class="task-list" id="list-todo" ondragover="event.preventDefault()" ondrop="handleDrop(event, 'todo')"></div>
+      </div>
+
+      <div class="column" data-col="inProgress">
+        <div class="col-header">
+          <h3>⚡ In Progress <span class="badge" id="count-inProgress">0</span></h3>
+        </div>
+        <div class="task-list" id="list-inProgress" ondragover="event.preventDefault()" ondrop="handleDrop(event, 'inProgress')"></div>
+      </div>
+
+      <div class="column" data-col="done">
+        <div class="col-header">
+          <h3>✅ Done <span class="badge" id="count-done">0</span></h3>
+        </div>
+        <div class="task-list" id="list-done" ondragover="event.preventDefault()" ondrop="handleDrop(event, 'done')"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    const board = new KanbanBoard();
+
+    function renderBoard() {
+      const priority = document.getElementById('priorityFilter').value;
+      const filtered = board.filterTasksByPriority(priority);
+
+      ['todo', 'inProgress', 'done'].forEach(col => {
+        const listEl = document.getElementById(`list-${col}`);
+        const countEl = document.getElementById(`count-${col}`);
+        listEl.innerHTML = '';
+        
+        const tasks = filtered[col] || [];
+        countEl.textContent = tasks.length;
+
+        tasks.forEach(task => {
+          const card = document.createElement('div');
+          card.className = `task-card priority-${task.priority}`;
+          card.draggable = true;
+          card.innerHTML = `
+            <div class="task-title">${escapeHtml(task.title)}</div>
+            <div class="task-meta">
+              <span class="p-badge p-${task.priority}">${task.priority.toUpperCase()}</span>
+              <button onclick="deleteTask('${task.id}')" class="delete-btn">🗑️</button>
+            </div>
+          `;
+          card.ondragstart = (e) => e.dataTransfer.setData('text/plain', task.id);
+          listEl.appendChild(card);
+        });
+      });
+    }
+
+    function handleDrop(e, targetCol) {
+      e.preventDefault();
+      const taskId = e.dataTransfer.getData('text/plain');
+      if (taskId && board.moveTask(taskId, targetCol)) {
+        renderBoard();
+      }
+    }
+
+    function deleteTask(id) {
+      if (board.deleteTask(id)) renderBoard();
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    document.getElementById('addTaskBtn').addEventListener('click', () => {
+      const title = prompt('Enter task title:');
+      if (title && title.trim()) {
+        board.addTask('todo', { title: title.trim(), priority: 'medium' });
+        renderBoard();
+      }
+    });
+
+    document.getElementById('priorityFilter').addEventListener('change', renderBoard);
+
+    renderBoard();
+  </script>
+</body>
+</html>
