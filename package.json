@@ -1,0 +1,12 @@
+{
+  "name": "kanban-flow",
+  "version": "1.0.0",
+  "description": "Lightweight Drag-and-Drop Task & Project Management Board",
+  "main": "app.js",
+  "scripts": {
+    "test": "node --test tests/kanban.test.js",
+    "start": "npx serve ."
+  },
+  "author": "Syahir Mahmud",
+  "license": "MIT"
+}
