@@ -36,3 +36,5 @@ npm test
 ## 📄 License
 
 [MIT License](LICENSE)
+
+<!-- GitHub Achievement Boost -->
