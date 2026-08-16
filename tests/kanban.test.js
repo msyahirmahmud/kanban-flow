@@ -10,6 +10,15 @@ describe('KanbanFlow Unit Tests', () => {
     assert.strictEqual(board.columns.done.length, 1);
   });
 
+  test('exportBoardState and importBoardState preserve state', () => {
+    const board = new KanbanBoard();
+    const exported = board.exportBoardState();
+    const newBoard = new KanbanBoard({ todo: [], inProgress: [], done: [] });
+    const success = newBoard.importBoardState(exported);
+    assert.strictEqual(success, true);
+    assert.strictEqual(newBoard.columns.todo.length, 2);
+  });
+
   test('addTask appends new task to target column', () => {
     const board = new KanbanBoard();
     const task = board.addTask('todo', { title: 'Write unit tests', priority: 'high' });

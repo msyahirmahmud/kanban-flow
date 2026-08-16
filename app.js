@@ -82,6 +82,23 @@ class KanbanBoard {
     }
     return filtered;
   }
+
+  exportBoardState() {
+    return JSON.stringify(this.columns, null, 2);
+  }
+
+  importBoardState(jsonStr) {
+    try {
+      const data = JSON.parse(jsonStr);
+      if (data && data.todo && data.inProgress && data.done) {
+        this.columns = data;
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 if (typeof module !== 'undefined' && module.exports) {
