@@ -82,6 +82,19 @@ class KanbanBoard {
     }
     return filtered;
   }
+
+  searchTasks(keyword) {
+    if (!keyword || !keyword.trim()) return this.columns;
+    const kw = keyword.toLowerCase().trim();
+    const result = {};
+    for (const [col, tasks] of Object.entries(this.columns)) {
+      result[col] = tasks.filter(t => 
+        t.title.toLowerCase().includes(kw) || 
+        t.tags.some(tag => tag.toLowerCase().includes(kw))
+      );
+    }
+    return result;
+  }
 }
 
 if (typeof module !== 'undefined' && module.exports) {
