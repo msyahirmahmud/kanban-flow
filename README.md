@@ -3,7 +3,6 @@
 [![Build Status](https://github.com/msyahirmahmud/kanban-flow/actions/workflows/ci.yml/badge.svg)](https://github.com/msyahirmahmud/kanban-flow/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![Tests Passing](https://img.shields.io/badge/Tests-100%25-brightgreen.svg)]()
 
 > Lightweight Drag-and-Drop Task & Project Management Board built with pure Vanilla JavaScript and HTML5 Drag and Drop API.
 
